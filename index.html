@@ -301,8 +301,8 @@
     <div class="toc-wrapper">
       <img src="images/logo-65b125a0.png" class="logo" alt="" />
         <div class="lang-selector">
-              <a href="#" data-language-name="javascript">javascript</a>
-              <a href="#" data-language-name="html">html</a>
+              <a href="#" data-language-name="javascript">JavaScript</a>
+              <a href="#" data-language-name="html">HTML</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -326,6 +326,12 @@
                   </li>
                   <li>
                     <a href="#step3" class="toc-h2 toc-link" data-title="STEP3. 決済画面呼び出すコードの設定">STEP3. 決済画面呼び出すコードの設定</a>
+                  </li>
+                  <li>
+                    <a href="#step4" class="toc-h2 toc-link" data-title="STEP4. 取引検証処理">STEP4. 取引検証処理</a>
+                  </li>
+                  <li>
+                    <a href="#step-5" class="toc-h2 toc-link" data-title="STEP.5 決済連動完了">STEP.5 決済連動完了</a>
                   </li>
               </ul>
           </li>
@@ -409,13 +415,70 @@
   <span class="p">});</span>
 </code></pre></div>
 <blockquote>
-<p>このサンプルコードはSBPSのクレジットカード決済要求時に指定するパラメータになります。
-<code>html
-//対応しておりません。
-</code>
-<code>payroad.request({....})</code>中に決済に必要なパラメータを指定して実行すれば、決済画面が呼び出されます。
-もっと詳しいパラメータ情報は「パラメータ詳細」から確認出来ます。</p>
+<p>このサンプルコードはSBPSのクレジットカード決済要求時に指定するパラメータになります。</p>
 </blockquote>
+<div class="highlight"><pre class="highlight html tab-html"><code><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">"requestPay()"</span><span class="nt">&gt;</span>支払い<span class="nt">&lt;/button&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">checkoutButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">payroad</span><span class="p">.</span><span class="nx">request</span><span class="p">({</span>
+      <span class="dl">"</span><span class="s2">pgCode</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">sbps</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">paymentMethod</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">credit</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">transactionId</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">PR1234567890</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">serviceId</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">merchantId</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">merchantOrderId</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">merchant_order_id</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">totalAmount</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">1000</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">totoalTax</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">productInfo</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">items</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">itemName1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">itemId1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">qty</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">300</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">tax</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="dl">"</span><span class="s2">paymentInfo</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">custCode</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">uniqueUserId</span><span class="dl">"</span>
+      <span class="p">}</span>
+      <span class="c1">//......以下省略</span>
+    <span class="p">}).</span><span class="nx">completed</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//決済成功時に呼び出し</span>
+    <span class="p">}).</span><span class="nx">incompleted</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//決済未完了時に呼び出し</span>
+      <span class="c1">//ユーザから決済止め</span>
+      <span class="c1">//決済画面閉じる</span>
+    <span class="p">}).</span><span class="nx">failed</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//決済失敗時に呼び出し</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<p><code>payroad.request({....})</code>中に決済に必要なパラメータを指定して実行すれば、決済画面が呼び出されます。
+もっと詳しいパラメータ情報は「パラメータ詳細」から確認出来ます。</p>
+
+<aside class="notice">
+加盟店様の取引ID(merchantOrderId)指定
+payroad.request()を呼び出す前に加盟店様のサーバから取引IDを生成してパラメータ情報中に指定するのをお勧めします。決済成功通知を受け取った際に改ざんされる恐れがあり検証を行うキーとして決済詳細情報取得APIにサーバ間通知を通して決済詳細情報を取得する必要があります。
+</aside>
+
+<p>処理完了後には<code>result</code>結果値を見て成功、失敗、エラーなどの判別が出来ます。各function中に加盟店様が様々な処理を実装して作成してください。</p>
+<h2 id='step4'>STEP4. 取引検証処理</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">"</span><span class="s2">/payments/complete</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="p">{</span> <span class="nx">transactionId</span><span class="p">,</span> <span class="nx">merchantOrderId</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+</code></pre></div>
+<p>上記のコードは/payment/completeにPOST要求するサンプルコードになります。<code>req.body</code>からPayRoadと加盟店様の取引IDを取得しました。</p>
+
+<p>取得した取引IDを指定して決済詳細情報APIから決済情報を取得してください。</p>
+<h2 id='step-5'>STEP.5 決済連動完了</h2>
+<p>加盟店様のウェブサイド決済連動テストが実装可能になりました。
+管理ツールにて設定情報をもう一度確認した上、決済テストを行ってください。</p>
 <h1 id='d7f544820d'>処理結果コード一覧</h1>
 <aside class="notice">
 下記のコードはPayRoadの処理結果コードになります。
@@ -476,8 +539,8 @@
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="javascript">javascript</a>
-                <a href="#" data-language-name="html">html</a>
+                <a href="#" data-language-name="javascript">JavaScript</a>
+                <a href="#" data-language-name="html">HTML</a>
           </div>
       </div>
     </div>
