@@ -282,7 +282,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-c9d8fa83.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-230b0d58.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-a9fde460.js"></script>
 
@@ -313,7 +313,24 @@
             <a href="#payroad-api" class="toc-h1 toc-link" data-title="PayRoad API 利用ガイド">PayRoad API 利用ガイド</a>
           </li>
           <li>
-            <a href="#api" class="toc-h1 toc-link" data-title="APIアクセス認証のトークン化">APIアクセス認証のトークン化</a>
+            <a href="#4ad1e2ad63" class="toc-h1 toc-link" data-title="認証処理方法">認証処理方法</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#1bff7d7a22" class="toc-h2 toc-link" data-title="認証">認証</a>
+                  </li>
+                  <li>
+                    <a href="#a83e661742" class="toc-h2 toc-link" data-title="プロトコル">プロトコル</a>
+                  </li>
+                  <li>
+                    <a href="#90aa7c4e14" class="toc-h2 toc-link" data-title="リクエスト">リクエスト</a>
+                  </li>
+                  <li>
+                    <a href="#99cdae5b4b" class="toc-h2 toc-link" data-title="レスポンス">レスポンス</a>
+                  </li>
+                  <li>
+                    <a href="#b41c1d579b" class="toc-h2 toc-link" data-title="タイムスタンプ">タイムスタンプ</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#337277fd92" class="toc-h1 toc-link" data-title="支払い処理">支払い処理</a>
@@ -347,23 +364,59 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='payroad-api'>PayRoad API 利用ガイド</h1>
+<aside class="notice">
+サンプルとして仮に記載した内容になります。
+</aside>
+
 <p>ここでは、PayRoadを利用してどのように支払いシステムを組み込むか、さまざまなチュートリアルを用意しています。 はじめに、PayRoadの重要な機能であるAPIアクセス認証のトークン化、支払い処理について簡単に紹介します。具体的な詳細は各ページに記載してあるのでご覧ください。</p>
-<h1 id='api'>APIアクセス認証のトークン化</h1>
+
+<p><img src="images/iamport-flow-d0155490.png" alt="alt iamPort" /></p>
+
+<p>ここでは、PayRoadを利用してどのように支払いシステムを組み込むか、さまざまなチュートリアルを用意しています。 はじめに、PayRoadの重要な機能であるAPIアクセス認証のトークン化、支払い処理について簡単に紹介します。具体的な詳細は各ページに記載してあるのでご覧ください。</p>
+<h1 id='4ad1e2ad63'>認証処理方法</h1><h2 id='1bff7d7a22'>認証</h2>
 <blockquote>
 <p>To authorize, use this code:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">merchant_api_key</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="dl">'</span><span class="s1">token</span><span class="dl">'</span><span class="p">);</span>
-</code></pre></div><div class="highlight"><pre class="highlight html tab-html"><code>//対応しておりません。
 </code></pre></div>
 <blockquote>
 <p><code>merchant_api_key</code>は管理ツールにて確認可能な認証キーになります。</p>
 </blockquote>
 
-<aside class="notice">
+<p>PayRoadのAPIを利用するには、ユーザー登録を行い、APIページからAPIキーを取得してください。 
+テスト用のキーでは、本番の支払い処理を行うサーバーへは接続されず、実際の支払い情報として計上されることもありません。
+本番用のキーは、本番申請を行うことで利用できるようになります。</p>
+
+<table><thead>
+<tr>
+<th>種類</th>
+<th>用途</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant api key</td>
+<td>HTML内に埋め込むトークン生成用のパブリックキー</td>
+</tr>
+</tbody></table>
+
+<p>通常の認証は、シークレットキーをユーザーネームとして扱い、Basic認証経由で行われます。
+パブリックキーは、あなたの決済画面のHTML内に組み込む公開用のAPIキーで、クレジットカードのトークンを生成する際に使用します。 シークレットキーは、全てのAPIリクエスト操作が可能となる重要なキーなので、くれぐれ も取扱いにご注意ください。</p>
+
+<aside class="warning">
 <code>merchant_api_key</code>は外部に流出されないように大切に取り扱いしてください。
 </aside>
+<h2 id='a83e661742'>プロトコル</h2>
+<p>セキュリティのため、PAY.JPに対する全てのAPI通信は必ずHTTPSで行うようにしてください。</p>
+<h2 id='90aa7c4e14'>リクエスト</h2>
+<p>PayRoad APIへのリクエストでは、GET、POSTの2種類のHTTPメソッドを利用できます。</p>
+
+<p>引数は、GETの場合はクエリーパラメータで、POSTではContent-Type: application/x-www-form-urlencodedのボディで送信ください。</p>
+<h2 id='99cdae5b4b'>レスポンス</h2>
+<p>APIからのレスポンスデータは正常・異常とも全てUTF-8のJSON形式(Content-Type: application/json; charset=utf-8)で返されます。</p>
+<h2 id='b41c1d579b'>タイムスタンプ</h2>
+<p>日次に関するデータはUNIXタイムスタンプで表示されます。 ただし一部のパラメータはDate型(e.g. 入金予定日 transfer.scheduled_date が 2021-07-07 など)で表示されます。</p>
 <h1 id='337277fd92'>支払い処理</h1><h2 id='step1'>STEP1. ライブラリー追加</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">//対応しておりません。</span>
 </code></pre></div><div class="highlight"><pre class="highlight html tab-html"><code><span class="c">&lt;!-- jQuery --&gt;</span>
 <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"https://code.jquery.com/jquery-1.12.4.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
